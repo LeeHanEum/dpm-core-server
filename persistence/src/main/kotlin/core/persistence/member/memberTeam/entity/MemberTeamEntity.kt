@@ -1,10 +1,10 @@
 package core.persistence.member.memberTeam.entity
 
 import core.application.member.member.domain.model.MemberId
-import core.persistence.member.member.entity.MemberEntity
 import core.application.member.memberTeam.domain.model.MemberTeam
 import core.application.member.memberTeam.domain.model.MemberTeamId
 import core.application.team.domain.model.TeamId
+import core.persistence.member.member.entity.MemberEntity
 import core.persistence.team.entity.TeamEntity
 import jakarta.persistence.Column
 import jakarta.persistence.ConstraintMode

@@ -8,7 +8,6 @@ import core.application.member.member.domain.model.MemberId
 import core.application.refreshToken.domain.model.RefreshToken
 import core.application.refreshToken.domain.port.outbound.RefreshTokenPersistencePort
 import core.persistence.refreshToken.entity.RefreshTokenEntity
-import core.persistence.refreshToken.repository.RefreshTokenJpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository

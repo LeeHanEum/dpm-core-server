@@ -1,9 +1,9 @@
 package core.persistence.gathering.gatheringReceiptPhoto.entity
 
 import core.application.gathering.gathering.domain.model.Gathering
-import core.persistence.gathering.gatheringReceipt.entity.GatheringReceiptEntity
 import core.application.gathering.gatheringReceiptPhoto.domain.model.GatheringReceiptPhoto
 import core.application.gathering.gatheringReceiptPhoto.domain.model.GatheringReceiptPhotoId
+import core.persistence.gathering.gatheringReceipt.entity.GatheringReceiptEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType

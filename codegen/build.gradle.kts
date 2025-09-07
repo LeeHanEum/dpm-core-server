@@ -11,11 +11,12 @@ val mysqlVersion = "8.0.33"
 
 dependencies {
     implementation("org.jooq:jooq:3.19.1")
-    implementation("org.springframework.boot:spring-boot-starter-jooq")
     jooqGenerator("org.jooq:jooq-meta:3.19.1")
     jooqGenerator("org.jooq:jooq-codegen:3.19.1")
     jooqGenerator("org.jooq:jooq-meta-extensions:3.19.1")
-    jooqGenerator("com.mysql:mysql-connector-j")
+    jooqGenerator("com.mysql:mysql-connector-j:$mysqlVersion")
+
+    runtimeOnly("com.mysql:mysql-connector-j:$mysqlVersion")
 }
 
 jooq {
@@ -56,18 +57,18 @@ jooq {
                             listOf(
                                 ForcedType().apply {
                                     name = "INSTANT"
-                                    expression = ".*\\.date"
-                                    types = "timestamp.*"
+                                    includeExpression = ".*\\.date"
+                                    includeTypes = "timestamp.*"
                                 },
                                 ForcedType().apply {
                                     name = "INSTANT"
-                                    expression = ".*\\.attendance_start"
-                                    types = "timestamp.*"
+                                    includeExpression = ".*\\.attendance_start"
+                                    includeTypes = "timestamp.*"
                                 },
                                 ForcedType().apply {
                                     name = "INSTANT"
-                                    expression = ".*\\.attended_at"
-                                    types = "timestamp.*"
+                                    includeExpression = ".*\\.attended_at"
+                                    includeTypes = "timestamp.*"
                                 },
                             ),
                         )
@@ -92,7 +93,7 @@ jooq {
 sourceSets {
     main {
         kotlin {
-            srcDirs("src/main/kotlin", "build/generated-src/jooq")
+            srcDirs("src/main/kotlin", "build/generated/jooq")
         }
     }
 }
@@ -102,5 +103,20 @@ tasks.register("prepareKotlinBuildScriptModel") {}
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+ktlint {
+    verbose.set(true)
+    outputToConsole.set(true)
+    coloredOutput.set(true)
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.JSON)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)
+    }
+    filter {
+        exclude("**/generated/**")
+        include("**/*.kt, **/*.kts")
     }
 }

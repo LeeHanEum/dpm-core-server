@@ -6,14 +6,14 @@ import com.linecorp.kotlinjdsl.spring.data.listQuery
 import com.linecorp.kotlinjdsl.spring.data.singleQuery
 import core.application.bill.bill.domain.model.Bill
 import core.application.bill.bill.domain.model.BillId
-import core.persistence.gathering.exception.GatheringException
-import core.persistence.gathering.exception.GatheringMemberException
 import core.application.gathering.gathering.domain.model.Gathering
 import core.application.gathering.gathering.domain.model.GatheringId
 import core.application.gathering.gathering.domain.model.query.SubmittedParticipantGathering
 import core.application.gathering.gathering.domain.port.outbound.GatheringPersistencePort
-import core.persistence.gathering.gathering.entity.GatheringEntity
 import core.application.member.member.domain.model.MemberId
+import core.persistence.gathering.exception.GatheringException
+import core.persistence.gathering.exception.GatheringMemberException
+import core.persistence.gathering.gathering.entity.GatheringEntity
 import org.jooq.DSLContext
 import org.jooq.generated.tables.references.GATHERINGS
 import org.jooq.generated.tables.references.GATHERING_MEMBERS

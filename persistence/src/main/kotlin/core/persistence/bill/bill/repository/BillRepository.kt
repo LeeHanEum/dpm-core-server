@@ -7,7 +7,6 @@ import core.application.bill.bill.domain.model.BillId
 import core.application.bill.bill.domain.port.outbound.BillPersistencePort
 import core.persistence.bill.bill.entity.BillEntity
 import core.persistence.bill.exception.BillException
-import core.persistence.bill.bill.repository.BillJpaRepository
 import org.jooq.DSLContext
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository

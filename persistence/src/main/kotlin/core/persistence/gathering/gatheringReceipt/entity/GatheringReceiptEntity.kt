@@ -2,9 +2,9 @@ package core.persistence.gathering.gatheringReceipt.entity
 
 import core.application.gathering.gathering.domain.model.Gathering
 import core.application.gathering.gathering.domain.model.GatheringId
-import core.persistence.gathering.gathering.entity.GatheringEntity
 import core.application.gathering.gatheringReceipt.domain.model.GatheringReceipt
 import core.application.gathering.gatheringReceipt.domain.model.GatheringReceiptId
+import core.persistence.gathering.gathering.entity.GatheringEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType

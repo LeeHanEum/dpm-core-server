@@ -9,7 +9,6 @@ import core.application.session.domain.model.Session
 import core.application.session.domain.model.SessionId
 import core.application.session.domain.port.outbound.SessionPersistencePort
 import core.persistence.session.entity.SessionEntity
-import core.persistence.session.repository.SessionJpaRepository
 import org.springframework.stereotype.Repository
 import java.time.Instant
 

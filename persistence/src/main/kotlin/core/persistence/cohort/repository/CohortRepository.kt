@@ -4,9 +4,8 @@ import com.linecorp.kotlinjdsl.querydsl.expression.col
 import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
 import core.application.cohort.domain.model.CohortId
 import core.application.cohort.domain.port.outbound.CohortPersistencePort
-import core.persistence.cohort.entity.CohortEntity
 import core.application.common.jdsl.singleQueryOrNull
-import core.persistence.cohort.repository.CohortJpaRepository
+import core.persistence.cohort.entity.CohortEntity
 import org.springframework.stereotype.Repository
 
 @Repository

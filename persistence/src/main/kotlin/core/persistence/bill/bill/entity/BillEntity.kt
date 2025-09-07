@@ -3,8 +3,8 @@ package core.persistence.bill.bill.entity
 import core.application.bill.bill.domain.model.Bill
 import core.application.bill.bill.domain.model.BillId
 import core.application.bill.bill.domain.model.BillStatus
-import core.persistence.bill.billAccount.entity.BillAccountEntity
 import core.application.member.member.domain.model.MemberId
+import core.persistence.bill.billAccount.entity.BillAccountEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType

@@ -5,8 +5,8 @@ import com.linecorp.kotlinjdsl.spring.data.listQuery
 import core.application.authority.domain.model.Authority
 import core.application.authority.domain.model.AuthorityId
 import core.application.authority.domain.port.outbound.AuthorityPersistencePort
-import core.persistence.authority.entity.AuthorityEntity
 import core.application.member.member.domain.model.MemberId
+import core.persistence.authority.entity.AuthorityEntity
 import org.jooq.DSLContext
 import org.jooq.generated.tables.references.AUTHORITIES
 import org.jooq.generated.tables.references.MEMBERS

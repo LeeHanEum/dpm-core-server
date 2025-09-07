@@ -2,14 +2,13 @@ package core.persistence.gathering.gatheringReceipt.repository
 
 import com.linecorp.kotlinjdsl.querydsl.expression.col
 import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
-import core.persistence.gathering.exception.GatheringReceiptException
 import core.application.gathering.gathering.domain.model.Gathering
 import core.application.gathering.gathering.domain.model.GatheringId
 import core.application.gathering.gatheringReceipt.domain.model.GatheringReceipt
 import core.application.gathering.gatheringReceipt.domain.model.GatheringReceiptId
 import core.application.gathering.gatheringReceipt.domain.port.GatheringReceiptPersistencePort
+import core.persistence.gathering.exception.GatheringReceiptException
 import core.persistence.gathering.gatheringReceipt.entity.GatheringReceiptEntity
-import core.persistence.gathering.gatheringReceipt.repository.GatheringReceiptJpaRepository
 import org.jooq.DSLContext
 import org.jooq.generated.tables.references.GATHERING_RECEIPTS
 import org.springframework.data.repository.findByIdOrNull
@@ -28,13 +27,13 @@ class GatheringReceiptRepository(
         gatheringReceiptJpaRepository.save(GatheringReceiptEntity.from(gatheringReceipt, gathering))
     }
 
-    override fun findById(gatheringReceiptId: GatheringReceiptId): GatheringReceiptEntity =
+    override fun findById(gatheringReceiptId: GatheringReceiptId): GatheringReceipt =
         gatheringReceiptJpaRepository.findByIdOrNull(
             gatheringReceiptId.value,
-        ) ?: throw GatheringReceiptException.GatheringReceiptNotFoundException()
+        )?.toDomain() ?: throw GatheringReceiptException.GatheringReceiptNotFoundException()
 
-    override fun findByGathering(gatheringId: GatheringId): GatheringReceiptEntity =
-        gatheringReceiptJpaRepository.findByGatheringId(gatheringId)
+    override fun findByGathering(gatheringId: GatheringId): GatheringReceipt =
+        gatheringReceiptJpaRepository.findByGatheringId(gatheringId)?.toDomain()
             ?: throw GatheringReceiptException.GatheringReceiptNotFoundException()
 
     override fun updateSplitAmount(gatheringReceipt: GatheringReceipt): Int =

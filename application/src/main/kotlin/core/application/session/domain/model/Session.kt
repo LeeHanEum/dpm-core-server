@@ -16,7 +16,7 @@ import kotlin.random.Random
  * 세션은 특정 기수의 주간 활동 정보를 나타내며, 출석 정책과 장소, 이벤트 이름 등을 포함합니다.
  * 세션 생성 시에 출석 코드가 자동으로 생성됩니다.
  */
-class Session internal constructor(
+class Session(
     val id: SessionId? = null,
     val cohortId: CohortId,
     val date: Instant,

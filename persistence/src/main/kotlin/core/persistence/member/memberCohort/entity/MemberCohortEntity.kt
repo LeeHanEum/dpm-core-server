@@ -1,11 +1,11 @@
 package core.persistence.member.memberCohort.entity
 
 import core.application.cohort.domain.model.CohortId
-import core.persistence.cohort.entity.CohortEntity
 import core.application.member.member.domain.model.MemberId
-import core.persistence.member.member.entity.MemberEntity
 import core.application.member.memberCohort.domain.model.MemberCohort
 import core.application.member.memberCohort.domain.model.MemberCohortId
+import core.persistence.cohort.entity.CohortEntity
+import core.persistence.member.member.entity.MemberEntity
 import jakarta.persistence.Column
 import jakarta.persistence.ConstraintMode
 import jakarta.persistence.Entity

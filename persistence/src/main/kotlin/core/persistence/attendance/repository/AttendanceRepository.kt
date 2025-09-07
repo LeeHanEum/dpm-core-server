@@ -16,10 +16,10 @@ import core.application.attendance.domain.port.inbound.query.GetDetailMemberAtte
 import core.application.attendance.domain.port.inbound.query.GetMemberAttendancesQuery
 import core.application.attendance.domain.port.inbound.query.GetMyAttendanceBySessionQuery
 import core.application.attendance.domain.port.outbound.AttendancePersistencePort
-import core.persistence.attendance.entity.AttendanceEntity
 import core.application.common.jdsl.singleQueryOrNull
 import core.application.member.member.domain.model.MemberId
 import core.application.session.domain.model.SessionId
+import core.persistence.attendance.entity.AttendanceEntity
 import org.jooq.DSLContext
 import org.jooq.generated.tables.references.ATTENDANCES
 import org.jooq.generated.tables.references.MEMBERS
