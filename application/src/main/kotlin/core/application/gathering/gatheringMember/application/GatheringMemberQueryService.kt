@@ -1,0 +1,88 @@
+package core.application.gathering.gatheringMember.application
+
+import core.application.authority.domain.model.AuthorityType
+import core.application.bill.bill.domain.port.inbound.query.BillMemberIsInvitationSubmittedQueryModel
+import core.application.gathering.exception.GatheringMemberException
+import core.application.gathering.gathering.domain.model.GatheringId
+import core.application.gathering.gatheringMember.domain.model.GatheringMember
+import core.application.gathering.gatheringMember.domain.port.inbound.GatheringMemberQueryUseCase
+import core.application.gathering.gatheringMember.domain.port.inbound.query.GatheringMemberIsJoinQueryModel
+import core.application.gathering.gatheringMember.domain.port.outbound.GatheringMemberPersistencePort
+import core.application.member.member.domain.model.MemberId
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+@Service
+@Transactional(readOnly = true)
+class GatheringMemberQueryService(
+    private val gatheringMemberPersistencePort: GatheringMemberPersistencePort,
+) : GatheringMemberQueryUseCase {
+    override fun getGatheringMemberByGatheringId(gatheringId: GatheringId): List<GatheringMember> =
+        gatheringMemberPersistencePort.findByGatheringId(gatheringId)
+
+    fun getGatheringMemberByGatheringIdAndMemberId(
+        gatheringId: GatheringId,
+        memberId: MemberId,
+    ): GatheringMember =
+        gatheringMemberPersistencePort
+            .findByGatheringIdAndMemberId(gatheringId, memberId)
+
+    fun getMemberIdsByGatheringId(gatheringId: GatheringId): List<MemberId> =
+        gatheringMemberPersistencePort
+            .findMemberIdsByGatheringId(gatheringId)
+            .takeIf { it.isNotEmpty() }
+            ?: throw GatheringMemberException.GatheringMemberNotFoundException()
+
+    fun getQueryGatheringMemberIsJoined(gatheringId: GatheringId): List<GatheringMemberIsJoinQueryModel> {
+        val memberIds = getMemberIdsByGatheringId(gatheringId)
+        return memberIds.map { memberId ->
+            val queryResults =
+                gatheringMemberPersistencePort
+                    .findGatheringMemberWithIsJoinByGatheringIdAndMemberId(gatheringId, memberId)
+                    .let { queryResults ->
+                        // TODO : 기수 정보가 추가됐을 때 기수 기준 정렬 등의 로직 추가 필요
+                        if (queryResults.size > 1) {
+                            queryResults.sortedWith(
+                                compareBy {
+                                    if (it.authority == AuthorityType.ORGANIZER.name) 0 else 1
+                                },
+                            )
+                        } else {
+                            queryResults
+                        }
+                    }
+            queryResults.first()
+        }
+    }
+
+    fun getQueryGatheringMemberIsInvitationSubmitted(
+        gatheringId: GatheringId,
+    ): List<BillMemberIsInvitationSubmittedQueryModel> {
+        val memberIds = getMemberIdsByGatheringId(gatheringId)
+        return memberIds.map { memberId ->
+            var queryResults =
+                gatheringMemberPersistencePort
+                    .findGatheringMemberWithIsInvitationSubmittedByGatheringIdAndMemberId(gatheringId, memberId)
+                    .let { queryResults ->
+                        // TODO : 기수 정보가 추가됐을 때 기수 기준 정렬 등의 로직 추가 필요
+                        if (queryResults.size > 1) {
+                            queryResults.sortedWith(
+                                compareBy {
+                                    if (it.authority == AuthorityType.ORGANIZER.name) 0 else 1
+                                },
+                            )
+                        } else {
+                            queryResults
+                        }
+                    }
+            queryResults.firstOrNull() ?: throw GatheringMemberException.GatheringMemberNotFoundException()
+        }
+    }
+
+    fun getGatheringMemberByGatheringIdsAndMemberIds(
+        gatheringIds: List<GatheringId>,
+        memberIds: List<MemberId>,
+    ): List<GatheringMember> =
+        gatheringMemberPersistencePort
+            .findGatheringMembersByGatheringIdsAndMemberIds(gatheringIds, memberIds)
+}

@@ -1,0 +1,49 @@
+package core.persistence.member.memberAuthority.repository
+
+import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
+import core.application.member.memberAuthority.domain.model.MemberAuthority
+import core.application.member.memberAuthority.domain.port.outbound.MemberAuthorityPersistencePort
+import org.jooq.DSLContext
+import org.jooq.generated.tables.references.AUTHORITIES
+import org.jooq.generated.tables.references.MEMBER_AUTHORITIES
+import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
+import java.time.ZoneId
+
+@Repository
+class MemberAuthorityRepository(
+    private val memberAuthorityJpaRepository: MemberAuthorityJpaRepository,
+    private val queryFactory: SpringDataQueryFactory,
+    private val dsl: DSLContext,
+) : MemberAuthorityPersistencePort {
+    override fun findAuthorityNamesByMemberId(memberId: Long): List<String> =
+        dsl
+            .select(AUTHORITIES.NAME)
+            .from(MEMBER_AUTHORITIES)
+            .join(AUTHORITIES)
+            .on(MEMBER_AUTHORITIES.AUTHORITY_ID.eq(AUTHORITIES.AUTHORITY_ID))
+            .where(
+                MEMBER_AUTHORITIES.MEMBER_ID
+                    .eq(memberId)
+                    .and(MEMBER_AUTHORITIES.DELETED_AT.isNull()),
+            ).fetch(AUTHORITIES.NAME)
+            .filterNotNull()
+
+    override fun save(memberAuthority: MemberAuthority) {
+        dsl
+            .insertInto(MEMBER_AUTHORITIES)
+            .set(MEMBER_AUTHORITIES.MEMBER_ID, memberAuthority.memberId.value)
+            .set(MEMBER_AUTHORITIES.AUTHORITY_ID, memberAuthority.authorityId.value)
+            .set(
+                MEMBER_AUTHORITIES.GRANTED_AT,
+                memberAuthority.grantedAt
+                    ?.atZone(ZoneId.of(TIME_ZONE))
+                    ?.toLocalDateTime()
+                    ?: LocalDateTime.now(),
+            ).execute()
+    }
+
+    companion object {
+        private const val TIME_ZONE = "Asia/Seoul"
+    }
+}

@@ -1,0 +1,130 @@
+package core.application.attendance.application
+
+import core.application.attendance.domain.exception.AttendanceNotFoundException
+import core.application.attendance.domain.port.inbound.query.GetAttendancesBySessionWeekQuery
+import core.application.attendance.domain.port.inbound.query.GetDetailAttendanceBySessionQuery
+import core.application.attendance.domain.port.inbound.query.GetDetailMemberAttendancesQuery
+import core.application.attendance.domain.port.inbound.query.GetMemberAttendancesQuery
+import core.application.attendance.domain.port.inbound.query.GetMyAttendanceBySessionQuery
+import core.application.attendance.domain.port.outbound.AttendancePersistencePort
+import core.application.attendance.presentation.dto.response.DetailAttendancesBySessionResponse
+import core.application.attendance.presentation.dto.response.DetailMemberAttendancesResponse
+import core.application.attendance.presentation.dto.response.MemberAttendanceResponse
+import core.application.attendance.presentation.dto.response.MemberAttendancesResponse
+import core.application.attendance.presentation.dto.response.MyDetailAttendanceBySessionResponse
+import core.application.attendance.presentation.dto.response.SessionAttendancesResponse
+import core.application.attendance.presentation.mapper.AttendanceMapper
+import core.application.common.util.paginate
+import core.application.member.member.application.MemberQueryService
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+private const val PAGE_SIZE = 20
+
+@Service
+@Transactional(readOnly = true)
+class AttendanceQueryService(
+    private val memberQueryService: MemberQueryService,
+    private val attendancePersistencePort: AttendancePersistencePort,
+    private val attendanceGraduationEvaluator: AttendanceGraduationEvaluator,
+) {
+    fun getAttendancesBySession(query: GetAttendancesBySessionWeekQuery): SessionAttendancesResponse {
+        val myTeamNumber =
+            query.onlyMyTeam
+                ?.let { memberQueryService.getMemberTeamNumber(query.memberId) }
+
+        val queryResult =
+            attendancePersistencePort
+                .findSessionAttendancesByQuery(query, myTeamNumber)
+                .sortedBy { it.teamNumber }
+        val paginatedResult = queryResult.paginate { it.id }
+
+        return AttendanceMapper.toSessionAttendancesResponse(
+            members = paginatedResult.content,
+            hasNext = paginatedResult.hasNext,
+            nextCursorId = paginatedResult.nextCursorId,
+        )
+    }
+
+    fun getMemberAttendances(query: GetMemberAttendancesQuery): MemberAttendancesResponse {
+        val myTeamNumber =
+            query.onlyMyTeam
+                ?.let { memberQueryService.getMemberTeamNumber(query.memberId) }
+
+        val queryResult =
+            attendancePersistencePort
+                .findMemberAttendancesByQuery(query, myTeamNumber)
+                .sortedBy { it.teamNumber }
+        val paginatedResult = queryResult.paginate { it.id }
+
+        return AttendanceMapper.toMemberAttendancesResponse(
+            members =
+                paginatedResult.content
+                    .map { member ->
+                        MemberAttendanceResponse(
+                            id = member.id,
+                            name = member.name,
+                            teamNumber = member.teamNumber,
+                            part = member.part,
+                            attendanceStatus =
+                                attendanceGraduationEvaluator.evaluate(
+                                    onlineAbsentCount = member.onlineAbsentCount,
+                                    offlineAbsentCount = member.offlineAbsentCount,
+                                    lateCount = member.lateCount,
+                                ),
+                        )
+                    }.toList(),
+            hasNext = paginatedResult.hasNext,
+            nextCursorId = paginatedResult.nextCursorId,
+        )
+    }
+
+    fun getDetailAttendanceBySession(query: GetDetailAttendanceBySessionQuery): DetailAttendancesBySessionResponse {
+        val queryResult = (
+            attendancePersistencePort
+                .findDetailAttendanceBySession(query)
+                ?: throw AttendanceNotFoundException()
+        )
+
+        return AttendanceMapper.toDetailAttendanceBySessionResponse(
+            queryResult,
+            evaluation =
+                attendanceGraduationEvaluator.evaluate(
+                    onlineAbsentCount = queryResult.onlineAbsentCount,
+                    offlineAbsentCount = queryResult.offlineAbsentCount,
+                    lateCount = queryResult.lateCount,
+                ),
+        )
+    }
+
+    fun getDetailMemberAttendances(query: GetDetailMemberAttendancesQuery): DetailMemberAttendancesResponse {
+        val memberAttendanceQueryResult =
+            attendancePersistencePort
+                .findDetailMemberAttendance(query)
+                ?: throw AttendanceNotFoundException()
+
+        val sessionAttendanceQueryResult =
+            attendancePersistencePort
+                .findMemberSessionAttendances(query)
+
+        return AttendanceMapper.toDetailMemberAttendancesResponse(
+            memberAttendanceModel = memberAttendanceQueryResult,
+            sessionAttendancesModel = sessionAttendanceQueryResult,
+            evaluation =
+                attendanceGraduationEvaluator.evaluate(
+                    onlineAbsentCount = memberAttendanceQueryResult.onlineAbsentCount,
+                    offlineAbsentCount = memberAttendanceQueryResult.offlineAbsentCount,
+                    lateCount = memberAttendanceQueryResult.lateCount,
+                ),
+        )
+    }
+
+    fun getMyDetailAttendanceBySession(query: GetMyAttendanceBySessionQuery): MyDetailAttendanceBySessionResponse {
+        val myAttendanceQueryResult =
+            attendancePersistencePort
+                .findMyDetailAttendanceBySession(query)
+                ?: throw AttendanceNotFoundException()
+
+        return AttendanceMapper.toMyDetailAttendanceBySessionResponse(myAttendanceQueryResult)
+    }
+}

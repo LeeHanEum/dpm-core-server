@@ -1,0 +1,196 @@
+package core.application.bill.bill.presentation.mapper
+
+import core.application.bill.bill.domain.model.Bill
+import core.application.bill.bill.presentation.dto.response.BillDetailGatheringResponse
+import core.application.bill.bill.presentation.dto.response.BillDetailResponse
+import core.application.bill.bill.presentation.dto.response.BillListDetailResponse
+import core.application.bill.bill.presentation.dto.response.BillListGatheringDetailResponse
+import core.application.bill.bill.presentation.dto.response.BillListResponse
+import core.application.bill.exception.BillAccountException
+import core.application.bill.exception.BillException
+import core.application.gathering.exception.GatheringException
+import core.application.gathering.gathering.domain.model.Gathering
+import core.application.gathering.gathering.domain.port.inbound.GatheringQueryUseCase
+import core.application.member.member.domain.model.MemberId
+import core.application.session.presentation.mapper.TimeMapper.instantToLocalDateTime
+import org.springframework.stereotype.Component
+import java.time.LocalDateTime
+import java.time.ZoneId
+
+@Component
+class BillMapper(
+    private val gatheringQueryUseCase: GatheringQueryUseCase,
+) {
+    fun toBillDetailResponse(
+        bill: Bill,
+        memberId: MemberId,
+    ): BillDetailResponse {
+        if (bill.id == null) throw BillException.BillNotFoundException()
+
+        val gatherings =
+            gatheringQueryUseCase.getAllGatheringsByBillId(bill.id)
+        if (gatherings.isEmpty()) throw GatheringException.GatheringRequiredException()
+
+        val gatheringReceipt =
+            gatherings.map { gathering ->
+                if (gathering.id == null) throw GatheringException.GatheringNotFoundException()
+
+                gatheringQueryUseCase
+                    .findGatheringReceiptByGatheringId(
+                        gathering.id,
+                    )
+            }
+
+        val allBillGatheringMembers =
+            gatheringQueryUseCase.getAllGatheringMembersByBillId(bill.id)
+
+        val gatheringMembersByRetrievedMember = allBillGatheringMembers.filter { it.memberId == memberId }
+
+        val billTotalSplitAmount =
+            gatheringQueryUseCase.findTotalSplitAmount(
+                gatherings.map {
+                    it.id ?: throw GatheringException.GatheringNotFoundException()
+                },
+            )
+        val myTotalSplitAmount =
+            Bill.findMemberBillTotalSplitAmount(
+                memberId,
+                gatheringMembersByRetrievedMember,
+                gatheringReceipt,
+            )
+
+        return BillDetailResponse(
+            billId = bill.id,
+            title = bill.title,
+            description = bill.description,
+            hostUserId = bill.hostUserId.value,
+            billTotalAmount = Bill.getBillTotalAmount(gatheringReceipt),
+            billTotalSplitAmount = billTotalSplitAmount,
+            myTotalSplitAmount = myTotalSplitAmount,
+            billStatus = bill.billStatus,
+            createdAt =
+                LocalDateTime.ofInstant(
+                    bill.createdAt,
+                    ZoneId.of(TIME_ZONE),
+                ),
+            billAccountId = bill.billAccount.id?.value ?: 0L,
+//            TODO : 매번 카운트 호출 좀 별로라서 고민해보면 좋을 것 같아요.
+            invitedMemberCount = Bill.getBillInvitedMemberCount(allBillGatheringMembers),
+            invitationSubmittedCount = Bill.getBillInvitationSubmittedCount(allBillGatheringMembers),
+            invitationCheckedMemberCount = Bill.getBillInvitationCheckedMemberCount(allBillGatheringMembers),
+            isViewed = Bill.getIsBillViewed(gatheringMembersByRetrievedMember),
+            isJoined = Bill.getIsBillJoined(gatheringMembersByRetrievedMember),
+            isInvitationSubmitted = Bill.getIsBillInvitationSubmitted(gatheringMembersByRetrievedMember),
+            gatherings =
+                gatherings.map { gathering ->
+
+                    val gatheringMembers =
+                        gatheringQueryUseCase.findGatheringMemberByGatheringId(
+                            gathering.id
+                                ?: throw GatheringException.GatheringNotFoundException(),
+                        )
+                    val splitAmount = gatheringReceipt.find { it.gatheringId == gathering.id }?.splitAmount
+                    BillDetailGatheringResponse.from(gathering, gatheringMembers, splitAmount)
+                },
+        )
+    }
+
+    fun toBillListResponse(
+        bills: List<Bill>,
+        memberId: MemberId,
+    ): BillListResponse {
+        val billDetailResponses =
+            bills
+                .map {
+                    toBillListDetailResponse(it, memberId)
+                }.toList()
+
+        return BillListResponse(
+            bills = billDetailResponses,
+        )
+    }
+
+    fun toBillListDetailResponse(
+        bill: Bill,
+        memberId: MemberId,
+    ): BillListDetailResponse {
+        val gatheringDetails =
+            gatheringQueryUseCase.getAllGatheringsByBillId(bill.id ?: throw BillException.BillNotFoundException()).map {
+                toBillListGatheringDetailResponse(it)
+            }
+        if (gatheringDetails.isEmpty()) throw GatheringException.GatheringRequiredException()
+
+//        TODO : 여기서 모든 gathering에 대해서 조회해서 체크하는 로직 필요(각 gathering마다 멤버가 다를 수 있어서)
+        val allBillGatheringMembers =
+            gatheringQueryUseCase.getAllGatheringMembersByBillId(bill.id)
+
+        val gatheringMembersByRetrievedMember = allBillGatheringMembers.filter { it.memberId == memberId }
+
+        val participants: MutableMap<Long, MutableList<Long>> = mutableMapOf<Long, MutableList<Long>>()
+
+        gatheringDetails.forEach { gatheringDetail ->
+            gatheringQueryUseCase
+                .findGatheringMemberByGatheringId(gatheringDetail.gatheringId)
+                .filter { it.isJoined == true }
+                .forEach { gatheringMember ->
+                    participants
+                        .computeIfAbsent(gatheringMember.memberId.value) { mutableListOf() }
+                        .add(gatheringDetail.gatheringId.value)
+                }
+        }
+        val participantCount = participants.filter { it.value.isNotEmpty() }.count()
+
+        val billTotalAmount =
+            gatheringDetails.sumOf { it.amount }
+
+        return BillListDetailResponse(
+            title = bill.title,
+            billId = bill.id,
+            description = bill.description,
+            billTotalAmount = billTotalAmount,
+            billStatus = bill.billStatus,
+            createdAt =
+                instantToLocalDateTime(bill.createdAt ?: throw BillException.BillNotFoundException()),
+            billAccountId = bill.billAccount.id?.value ?: throw BillAccountException.BillAccountNotFoundException(),
+//            TODO : 매번 카운트 호출 좀 별로라서 고민해보면 좋을 것 같아요.
+            invitedMemberCount = Bill.getBillInvitedMemberCount(allBillGatheringMembers),
+            invitationSubmittedCount = Bill.getBillInvitationSubmittedCount(allBillGatheringMembers),
+            invitationCheckedMemberCount = Bill.getBillInvitationCheckedMemberCount(allBillGatheringMembers),
+            participantCount = participantCount,
+            isViewed = Bill.getIsBillViewed(gatheringMembersByRetrievedMember),
+            isJoined = Bill.getIsBillJoined(gatheringMembersByRetrievedMember),
+            isInvitationSubmitted = Bill.getIsBillInvitationSubmitted(gatheringMembersByRetrievedMember),
+//            inviteAuthorities = TODO(),
+            gatherings = gatheringDetails,
+        )
+    }
+
+    fun toBillListGatheringDetailResponse(gathering: Gathering): BillListGatheringDetailResponse {
+        val gatheringReceipt =
+            gatheringQueryUseCase.findGatheringReceiptByGatheringId(
+                gathering.id ?: throw GatheringException.GatheringNotFoundException(),
+            )
+        val gatheringMembers = gatheringQueryUseCase.findGatheringMemberByGatheringId(gathering.id)
+        val joinMemberCount = gatheringMembers.count { it.isJoined == true }
+
+        return BillListGatheringDetailResponse(
+            gatheringId = gathering.id,
+            title = gathering.title,
+            description = gathering.description,
+            roundNumber = gathering.roundNumber,
+            heldAt =
+                gathering.heldAt
+                    .atZone(ZoneId.of(TIME_ZONE))
+                    .toLocalDateTime(),
+            category = gathering.category,
+//            receipt = gatheringReceipt, TODO : 영수증 추 후 구현
+            joinMemberCount = joinMemberCount,
+            amount = gatheringReceipt.amount,
+            splitAmount = gatheringReceipt.splitAmount,
+        )
+    }
+
+    companion object {
+        private const val TIME_ZONE = "Asia/Seoul"
+    }
+}
