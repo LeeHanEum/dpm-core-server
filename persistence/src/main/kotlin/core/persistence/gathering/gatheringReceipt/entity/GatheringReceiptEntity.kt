@@ -1,9 +1,9 @@
 package core.persistence.gathering.gatheringReceipt.entity
 
-import core.application.gathering.gathering.domain.model.Gathering
-import core.application.gathering.gathering.domain.model.GatheringId
-import core.application.gathering.gatheringReceipt.domain.model.GatheringReceipt
-import core.application.gathering.gatheringReceipt.domain.model.GatheringReceiptId
+import core.domain.gathering.gathering.model.Gathering
+import core.domain.gathering.gathering.model.GatheringId
+import core.domain.gathering.gatheringReceipt.model.GatheringReceipt
+import core.domain.gathering.gatheringReceipt.model.GatheringReceiptId
 import core.persistence.gathering.gathering.entity.GatheringEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

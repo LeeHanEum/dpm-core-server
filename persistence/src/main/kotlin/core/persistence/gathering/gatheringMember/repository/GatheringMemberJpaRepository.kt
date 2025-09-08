@@ -1,7 +1,7 @@
 package core.persistence.gathering.gatheringMember.repository
 
-import core.application.gathering.gathering.domain.model.GatheringId
-import core.application.member.member.domain.model.MemberId
+import core.domain.gathering.gathering.model.GatheringId
+import core.domain.member.member.model.MemberId
 import core.persistence.gathering.gatheringMember.entity.GatheringMemberEntity
 import org.springframework.data.jpa.repository.JpaRepository
 

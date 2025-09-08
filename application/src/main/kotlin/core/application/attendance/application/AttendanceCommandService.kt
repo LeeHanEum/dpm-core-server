@@ -1,6 +1,6 @@
 package core.application.attendance.application
 
-import core.application.attendance.domain.exception.AttendanceNotFoundException
+import core.application.attendance.application.exception.AttendanceNotFoundException
 import core.application.attendance.domain.model.Attendance
 import core.application.attendance.domain.model.AttendanceStatus
 import core.application.attendance.domain.port.inbound.command.AttendanceCreateCommand
@@ -9,9 +9,9 @@ import core.application.attendance.domain.port.inbound.command.AttendanceStatusU
 import core.application.attendance.domain.port.outbound.AttendancePersistencePort
 import core.application.cohort.application.config.CohortProperties
 import core.application.member.member.application.MemberQueryService
-import core.application.member.member.domain.exception.CohortMembersNotFoundException
+import core.application.member.member.application.exception.CohortMembersNotFoundException
 import core.application.session.application.SessionQueryService
-import core.application.session.domain.exception.CheckedAttendanceException
+import core.application.session.application.exception.CheckedAttendanceException
 import core.application.session.domain.model.SessionId
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

@@ -1,8 +1,8 @@
 package core.persistence.bill.billAccount.entity
 
-import core.application.bill.billAccount.domain.model.AccountType
-import core.application.bill.billAccount.domain.model.BillAccount
-import core.application.bill.billAccount.domain.model.BillAccountId
+import core.domain.bill.bill.model.AccountType
+import core.domain.bill.bill.model.BillAccount
+import core.domain.bill.bill.model.BillAccountId
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

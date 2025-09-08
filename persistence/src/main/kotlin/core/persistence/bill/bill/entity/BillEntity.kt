@@ -1,9 +1,9 @@
 package core.persistence.bill.bill.entity
 
-import core.application.bill.bill.domain.model.Bill
-import core.application.bill.bill.domain.model.BillId
-import core.application.bill.bill.domain.model.BillStatus
-import core.application.member.member.domain.model.MemberId
+import core.domain.bill.bill.model.Bill
+import core.domain.bill.bill.model.BillId
+import core.domain.bill.bill.model.BillStatus
+import core.domain.member.member.model.MemberId
 import core.persistence.bill.billAccount.entity.BillAccountEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

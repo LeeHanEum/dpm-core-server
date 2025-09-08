@@ -1,8 +1,7 @@
 package core.persistence.session.entity
 
-import core.application.cohort.domain.model.CohortId
-import core.application.session.domain.model.Session
-import core.application.session.domain.model.SessionId
+import core.domain.cohort.model.CohortId
+import core.domain.sessionmodel.sessionmodel.sessionmodel.SessionId
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded

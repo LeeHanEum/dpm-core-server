@@ -1,11 +1,11 @@
 package core.persistence.gathering.gathering.entity
 
-import core.application.bill.bill.domain.model.Bill
-import core.application.bill.bill.domain.model.BillId
-import core.application.gathering.gathering.domain.model.Gathering
-import core.application.gathering.gathering.domain.model.GatheringCategory
-import core.application.gathering.gathering.domain.model.GatheringId
-import core.application.member.member.domain.model.MemberId
+import core.domain.bill.bill.model.Bill
+import core.domain.bill.bill.model.BillId
+import core.domain.gathering.gathering.model.Gathering
+import core.domain.gathering.gathering.model.GatheringCategory
+import core.domain.gathering.gathering.model.GatheringId
+import core.domain.member.member.model.MemberId
 import core.persistence.bill.bill.entity.BillEntity
 import core.persistence.bill.exception.BillException
 import core.persistence.gathering.gatheringReceipt.entity.GatheringReceiptEntity

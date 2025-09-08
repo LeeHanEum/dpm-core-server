@@ -1,8 +1,8 @@
 package core.application.session.application
 
 import core.application.session.domain.event.SessionCreateEvent
-import core.application.session.domain.exception.InvalidSessionIdException
-import core.application.session.domain.exception.SessionNotFoundException
+import core.application.session.application.exception.InvalidSessionIdException
+import core.application.session.application.exception.SessionNotFoundException
 import core.application.session.domain.model.Session
 import core.application.session.domain.model.SessionId
 import core.application.session.domain.port.inbound.command.SessionCreateCommand

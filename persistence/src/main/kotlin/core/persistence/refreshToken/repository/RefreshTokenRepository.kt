@@ -3,10 +3,9 @@ package core.persistence.refreshToken.repository
 import com.linecorp.kotlinjdsl.querydsl.expression.col
 import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
 import com.linecorp.kotlinjdsl.spring.data.deleteQuery
-import core.application.common.jdsl.singleQueryOrNull
-import core.application.member.member.domain.model.MemberId
-import core.application.refreshToken.domain.model.RefreshToken
-import core.application.refreshToken.domain.port.outbound.RefreshTokenPersistencePort
+import core.domain.common.jdsl.singleQueryOrNull
+import core.domain.member.member.model.MemberId
+import core.domain.refreshTokenmodel.refreshTokenmodel.refreshTokenport.outbound.RefreshTokenPersistencePort
 import core.persistence.refreshToken.entity.RefreshTokenEntity
 import org.springframework.stereotype.Repository
 

@@ -1,9 +1,9 @@
 package core.persistence.member.memberCohort.entity
 
-import core.application.cohort.domain.model.CohortId
-import core.application.member.member.domain.model.MemberId
-import core.application.member.memberCohort.domain.model.MemberCohort
-import core.application.member.memberCohort.domain.model.MemberCohortId
+import core.domain.cohort.model.CohortId
+import core.domain.member.member.model.MemberId
+import core.domain.member.memberCohort.model.MemberCohort
+import core.domain.member.memberCohort.model.MemberCohortId
 import core.persistence.cohort.entity.CohortEntity
 import core.persistence.member.member.entity.MemberEntity
 import jakarta.persistence.Column

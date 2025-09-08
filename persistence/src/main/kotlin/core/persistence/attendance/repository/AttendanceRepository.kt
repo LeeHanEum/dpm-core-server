@@ -1,24 +1,13 @@
 package core.persistence.attendance.repository
 
-import com.linecorp.kotlinjdsl.querydsl.expression.col
-import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
-import core.application.attendance.application.query.model.MemberAttendanceQueryModel
-import core.application.attendance.application.query.model.MemberDetailAttendanceQueryModel
-import core.application.attendance.application.query.model.MemberSessionAttendanceQueryModel
-import core.application.attendance.application.query.model.MyDetailAttendanceQueryModel
-import core.application.attendance.application.query.model.SessionAttendanceQueryModel
-import core.application.attendance.application.query.model.SessionDetailAttendanceQueryModel
-import core.application.attendance.domain.model.Attendance
-import core.application.attendance.domain.model.AttendanceStatus
-import core.application.attendance.domain.port.inbound.query.GetAttendancesBySessionWeekQuery
-import core.application.attendance.domain.port.inbound.query.GetDetailAttendanceBySessionQuery
-import core.application.attendance.domain.port.inbound.query.GetDetailMemberAttendancesQuery
-import core.application.attendance.domain.port.inbound.query.GetMemberAttendancesQuery
-import core.application.attendance.domain.port.inbound.query.GetMyAttendanceBySessionQuery
-import core.application.attendance.domain.port.outbound.AttendancePersistencePort
-import core.application.common.jdsl.singleQueryOrNull
-import core.application.member.member.domain.model.MemberId
-import core.application.session.domain.model.SessionId
+import core.domain.attendance.model.Attendance
+import core.domain.attendance.model.AttendanceStatus
+import core.domain.attendance.port.inbound.query.GetAttendancesBySessionWeekQuery
+import core.domain.attendance.port.inbound.query.GetDetailAttendanceBySessionQuery
+import core.domain.attendance.port.inbound.query.GetDetailMemberAttendancesQuery
+import core.domain.attendance.port.inbound.query.GetMemberAttendancesQuery
+import core.domain.attendance.port.inbound.query.GetMyAttendanceBySessionQuery
+import core.domain.attendance.port.outbound.AttendancePersistencePort
 import core.persistence.attendance.entity.AttendanceEntity
 import org.jooq.DSLContext
 import org.jooq.generated.tables.references.ATTENDANCES
@@ -36,26 +25,16 @@ private const val PAGE_SIZE = 20
 @Repository
 class AttendanceRepository(
     private val attendanceJpaRepository: AttendanceJpaRepository,
-    private val queryFactory: SpringDataQueryFactory,
     private val dsl: DSLContext,
 ) : AttendancePersistencePort {
-    override fun findAttendanceBy(
-        sessionId: SessionId,
-        memberId: MemberId,
-    ): Attendance? =
-        queryFactory
-            .singleQueryOrNull<AttendanceEntity> {
-                select(entity(AttendanceEntity::class))
-                from(entity(AttendanceEntity::class))
-                whereAnd(
-                    col(AttendanceEntity::sessionId).equal(sessionId.value),
-                    col(AttendanceEntity::memberId).equal(memberId.value),
-                )
-            }?.toDomain()
-
     override fun save(attendance: Attendance) {
         attendanceJpaRepository.save(AttendanceEntity.from(attendance))
     }
+
+    override fun findAttendanceBy(
+        sessionId: Long,
+        memberId: Long,
+    ): Attendance? = attendanceJpaRepository.findBySessionIdAndMemberId(sessionId, memberId)?.toDomain()
 
     override fun findSessionAttendancesByQuery(
         query: GetAttendancesBySessionWeekQuery,

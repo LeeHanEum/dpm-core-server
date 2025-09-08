@@ -1,10 +1,10 @@
 package core.persistence.attendance.entity
 
-import core.application.attendance.domain.model.Attendance
-import core.application.attendance.domain.model.AttendanceId
-import core.application.attendance.domain.model.AttendanceStatus
-import core.application.member.member.domain.model.MemberId
-import core.application.session.domain.model.SessionId
+import core.domain.attendance.model.Attendance
+import core.domain.attendance.model.AttendanceId
+import core.domain.attendance.model.AttendanceStatus
+import core.domain.member.member.model.MemberId
+import core.domain.session.model.SessionId
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

@@ -1,6 +1,6 @@
 package core.persistence.gathering.exception
 
-import core.application.common.exception.ExceptionCode
+import core.domain.common.exception.ExceptionCode
 import org.springframework.http.HttpStatus
 
 enum class GatheringReceiptPhotoExceptionCode(

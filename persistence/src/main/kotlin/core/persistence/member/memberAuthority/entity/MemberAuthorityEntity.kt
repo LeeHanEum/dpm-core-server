@@ -1,9 +1,9 @@
 package core.persistence.member.memberAuthority.entity
 
-import core.application.authority.domain.model.AuthorityId
-import core.application.member.member.domain.model.MemberId
-import core.application.member.memberAuthority.domain.model.MemberAuthority
-import core.application.member.memberAuthority.domain.model.MemberAuthorityId
+import core.domain.authority.model.AuthorityId
+import core.domain.member.member.model.MemberId
+import core.domain.member.memberAuthority.model.MemberAuthority
+import core.domain.member.memberAuthority.model.MemberAuthorityId
 import core.persistence.authority.entity.AuthorityEntity
 import core.persistence.member.member.entity.MemberEntity
 import jakarta.persistence.Column

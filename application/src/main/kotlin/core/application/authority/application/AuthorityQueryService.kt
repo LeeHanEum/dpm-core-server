@@ -1,12 +1,12 @@
 package core.application.authority.application
 
 import core.application.authority.application.exception.AuthorityNotFoundException
-import core.application.authority.domain.model.AuthorityId
-import core.application.authority.domain.model.AuthorityType
-import core.application.authority.domain.port.inbound.AuthorityQueryUseCase
-import core.application.authority.domain.port.outbound.AuthorityPersistencePort
 import core.application.authority.presentation.response.AuthorityListResponse
-import core.application.member.member.domain.model.MemberId
+import core.domain.authority.model.AuthorityId
+import core.domain.authority.model.AuthorityType
+import core.domain.authority.port.inbound.AuthorityQueryUseCase
+import core.domain.authority.port.outbound.AuthorityPersistencePort
+import core.domain.member.member.model.MemberId
 import org.springframework.stereotype.Service
 
 @Service

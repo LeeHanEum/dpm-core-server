@@ -1,9 +1,9 @@
 package core.persistence.member.memberTeam.entity
 
-import core.application.member.member.domain.model.MemberId
-import core.application.member.memberTeam.domain.model.MemberTeam
-import core.application.member.memberTeam.domain.model.MemberTeamId
-import core.application.team.domain.model.TeamId
+import core.domain.member.member.model.MemberId
+import core.domain.member.memberTeam.model.MemberTeam
+import core.domain.member.memberTeam.model.MemberTeamId
+import core.domain.team.model.TeamId
 import core.persistence.member.member.entity.MemberEntity
 import core.persistence.team.entity.TeamEntity
 import jakarta.persistence.Column

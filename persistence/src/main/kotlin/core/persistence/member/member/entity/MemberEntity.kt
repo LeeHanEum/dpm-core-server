@@ -1,9 +1,9 @@
 package core.persistence.member.member.entity
 
-import core.application.member.member.domain.model.Member
-import core.application.member.member.domain.model.MemberId
-import core.application.member.member.domain.model.MemberPart
-import core.application.member.member.domain.model.MemberStatus
+import core.domain.member.member.model.Member
+import core.domain.member.member.model.MemberId
+import core.domain.member.member.model.MemberPart
+import core.domain.member.member.model.MemberStatus
 import core.persistence.member.memberAuthority.entity.MemberAuthorityEntity
 import core.persistence.member.memberCohort.entity.MemberCohortEntity
 import core.persistence.member.memberOAuth.entity.MemberOAuthEntity

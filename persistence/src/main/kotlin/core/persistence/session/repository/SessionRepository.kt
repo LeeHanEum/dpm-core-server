@@ -3,11 +3,10 @@ package core.persistence.session.repository
 import com.linecorp.kotlinjdsl.querydsl.expression.col
 import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
 import com.linecorp.kotlinjdsl.spring.data.listQuery
-import core.application.cohort.domain.model.CohortId
-import core.application.common.jdsl.singleQueryOrNull
-import core.application.session.domain.model.Session
-import core.application.session.domain.model.SessionId
-import core.application.session.domain.port.outbound.SessionPersistencePort
+import core.domain.cohort.model.CohortId
+import core.domain.common.jdsl.singleQueryOrNull
+import core.domain.sessionmodel.sessionmodel.sessionmodel.SessionId
+import core.domain.sessionport.outbound.SessionPersistencePort
 import core.persistence.session.entity.SessionEntity
 import org.springframework.stereotype.Repository
 import java.time.Instant

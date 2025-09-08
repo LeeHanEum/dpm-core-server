@@ -2,9 +2,9 @@ package core.persistence.bill.bill.repository
 
 import com.linecorp.kotlinjdsl.querydsl.expression.col
 import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
-import core.application.bill.bill.domain.model.Bill
-import core.application.bill.bill.domain.model.BillId
-import core.application.bill.bill.domain.port.outbound.BillPersistencePort
+import core.domain.bill.bill.model.Bill
+import core.domain.bill.bill.model.BillId
+import core.domain.bill.bill.port.outbound.BillPersistencePort
 import core.persistence.bill.bill.entity.BillEntity
 import core.persistence.bill.exception.BillException
 import org.jooq.DSLContext

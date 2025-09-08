@@ -1,7 +1,7 @@
 package core.persistence.member.memberOAuth.entity
 
-import core.application.member.member.domain.model.Member
-import core.application.member.memberOAuth.domain.model.MemberOAuth
+import core.domain.member.member.model.Member
+import core.domain.member.member.model.MemberOAuth
 import core.persistence.member.member.entity.MemberEntity
 import jakarta.persistence.Column
 import jakarta.persistence.ConstraintMode

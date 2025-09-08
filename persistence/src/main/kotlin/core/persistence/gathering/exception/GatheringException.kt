@@ -1,6 +1,6 @@
 package core.persistence.gathering.exception
 
-import core.application.common.exception.BusinessException
+import core.domain.common.exception.BusinessException
 
 open class GatheringException(
     code: GatheringExceptionCode,

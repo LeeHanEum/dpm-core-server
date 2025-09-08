@@ -1,10 +1,10 @@
 package core.persistence.attendance.repository
 
-import core.application.attendance.domain.port.inbound.query.GetAttendancesBySessionWeekQuery
-import core.application.attendance.domain.port.inbound.query.GetDetailAttendanceBySessionQuery
-import core.application.attendance.domain.port.inbound.query.GetDetailMemberAttendancesQuery
-import core.application.attendance.domain.port.inbound.query.GetMemberAttendancesQuery
-import core.application.attendance.domain.port.inbound.query.GetMyAttendanceBySessionQuery
+import core.domain.attendance.port.inbound.query.GetAttendancesBySessionWeekQuery
+import core.domain.attendance.port.inbound.query.GetDetailAttendanceBySessionQuery
+import core.domain.attendance.port.inbound.query.GetDetailMemberAttendancesQuery
+import core.domain.attendance.port.inbound.query.GetMemberAttendancesQuery
+import core.domain.attendance.port.inbound.query.GetMyAttendanceBySessionQuery
 import org.jooq.Condition
 import org.jooq.generated.tables.references.ATTENDANCES
 import org.jooq.generated.tables.references.MEMBERS

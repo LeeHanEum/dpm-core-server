@@ -1,8 +1,8 @@
 package core.persistence.member.memberOAuth.repository
 
-import core.application.member.member.domain.model.Member
-import core.application.member.memberOAuth.domain.model.MemberOAuth
-import core.application.member.memberOAuth.domain.port.MemberOAuthPersistencePort
+import core.domain.member.member.model.Member
+import core.domain.member.member.model.MemberOAuth
+import core.domain.member.member.port.MemberOAuthPersistencePort
 import core.persistence.member.memberOAuth.entity.MemberOAuthEntity
 import org.springframework.stereotype.Repository
 

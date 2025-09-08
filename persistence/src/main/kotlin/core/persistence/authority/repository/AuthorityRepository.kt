@@ -2,10 +2,10 @@ package core.persistence.authority.repository
 
 import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
 import com.linecorp.kotlinjdsl.spring.data.listQuery
-import core.application.authority.domain.model.Authority
-import core.application.authority.domain.model.AuthorityId
-import core.application.authority.domain.port.outbound.AuthorityPersistencePort
-import core.application.member.member.domain.model.MemberId
+import core.domain.authority.model.Authority
+import core.domain.authority.model.AuthorityId
+import core.domain.authority.port.outbound.AuthorityPersistencePort
+import core.domain.member.member.model.MemberId
 import core.persistence.authority.entity.AuthorityEntity
 import org.jooq.DSLContext
 import org.jooq.generated.tables.references.AUTHORITIES

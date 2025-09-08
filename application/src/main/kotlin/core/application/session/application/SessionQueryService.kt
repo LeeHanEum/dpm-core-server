@@ -2,7 +2,7 @@ package core.application.session.application
 
 import core.application.cohort.domain.port.inbound.CohortQueryUseCase
 import core.application.session.application.query.SessionWeekQueryModel
-import core.application.session.domain.exception.SessionNotFoundException
+import core.application.session.application.exception.SessionNotFoundException
 import core.application.session.domain.model.Session
 import core.application.session.domain.model.SessionId
 import core.application.session.domain.port.outbound.SessionPersistencePort

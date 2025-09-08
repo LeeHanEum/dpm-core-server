@@ -16,5 +16,6 @@ dependencyResolutionManagement {
 rootProject.name = "dpm-core-server"
 
 include("application")
+include("domain")
 include("persistence")
 include("codegen")

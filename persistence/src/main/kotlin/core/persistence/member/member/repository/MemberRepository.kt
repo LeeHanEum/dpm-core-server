@@ -1,14 +1,9 @@
 package core.persistence.member.member.repository
 
-import com.linecorp.kotlinjdsl.querydsl.expression.col
-import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
-import core.application.authority.domain.model.AuthorityId
-import core.application.common.jdsl.singleQueryOrNull
-import core.application.member.member.application.exception.MemberNameAuthorityRequiredException
-import core.application.member.member.domain.model.Member
-import core.application.member.member.domain.model.MemberId
-import core.application.member.member.domain.model.query.MemberNameAuthorityQueryModel
-import core.application.member.member.domain.port.outbound.MemberPersistencePort
+import core.domain.authority.model.AuthorityId
+import core.domain.member.member.model.Member
+import core.domain.member.member.model.MemberId
+import core.domain.member.member.port.outbound.MemberPersistencePort
 import core.persistence.member.member.entity.MemberEntity
 import org.jooq.DSLContext
 import org.jooq.generated.tables.references.AUTHORITIES
@@ -19,59 +14,22 @@ import org.jooq.generated.tables.references.MEMBER_COHORTS
 import org.jooq.generated.tables.references.MEMBER_TEAMS
 import org.jooq.generated.tables.references.TEAMS
 import org.springframework.stereotype.Repository
-import java.time.Instant
 
 @Repository
 class MemberRepository(
     private val memberJpaRepository: MemberJpaRepository,
-    private val queryFactory: SpringDataQueryFactory,
     private val dsl: DSLContext,
 ) : MemberPersistencePort {
-    override fun findByEmail(email: String): Member? =
-        queryFactory
-            .singleQueryOrNull {
-                select(entity(MemberEntity::class))
-                from(entity(MemberEntity::class))
-                where(col(MemberEntity::email).equal(email))
-            }?.toDomain()
+    override fun findByEmail(email: String): Member? = memberJpaRepository.findByEmail(email).toDomain()
 
     override fun save(member: Member): Member = memberJpaRepository.save(MemberEntity.from(member)).toDomain()
 
-    override fun findById(memberId: Long): Member? =
-        queryFactory
-            .singleQueryOrNull {
-                select(entity(MemberEntity::class))
-                from(entity(MemberEntity::class))
-                where(col(MemberEntity::id).equal(memberId))
-            }?.toDomain()
+    override fun findById(memberId: Long): Member? = memberJpaRepository.findById(memberId).orElse(null).toDomain()
 
-    override fun existsById(memberId: Long): Boolean =
-        queryFactory
-            .singleQueryOrNull {
-                select(col(MemberEntity::id))
-                from(entity(MemberEntity::class))
-                where(col(MemberEntity::id).equal(memberId))
-            } != null
-
-    override fun delete(memberId: Long) {
-        queryFactory
-            .updateQuery(MemberEntity::class) {
-                set(col(MemberEntity::deletedAt), Instant.now())
-                where(col(MemberEntity::id).equal(memberId))
-            }.executeUpdate()
-    }
+    override fun existsById(memberId: Long): Boolean = memberJpaRepository.existsById(memberId)
 
     override fun existsDeletedMemberById(memberId: Long): Boolean =
-        queryFactory
-            .singleQueryOrNull {
-                select(col(MemberEntity::id))
-                from(entity(MemberEntity::class))
-                where(
-                    col(MemberEntity::id)
-                        .equal(memberId)
-                        .and(col(MemberEntity::deletedAt).isNotNull()),
-                )
-            } != null
+        memberJpaRepository.existsByIdAndDeletedAtIsNotNull(memberId)
 
     override fun findAllMemberIdByAuthorityIds(authorityIds: List<AuthorityId>): List<MemberId> =
         dsl

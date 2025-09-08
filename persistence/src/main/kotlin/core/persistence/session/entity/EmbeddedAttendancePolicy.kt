@@ -1,6 +1,6 @@
 package core.persistence.session.entity
 
-import core.application.session.domain.model.AttendancePolicy
+import core.domain.sessionmodel.AttendancePolicy
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import java.time.Instant

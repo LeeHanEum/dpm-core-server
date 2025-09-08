@@ -6,8 +6,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":application"))
     implementation(project(":codegen"))
+    implementation(project(":domain"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jooq")

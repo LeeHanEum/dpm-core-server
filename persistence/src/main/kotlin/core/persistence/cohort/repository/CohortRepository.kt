@@ -1,24 +1,14 @@
 package core.persistence.cohort.repository
 
-import com.linecorp.kotlinjdsl.querydsl.expression.col
-import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
-import core.application.cohort.domain.model.CohortId
-import core.application.cohort.domain.port.outbound.CohortPersistencePort
-import core.application.common.jdsl.singleQueryOrNull
-import core.persistence.cohort.entity.CohortEntity
+import core.domain.cohort.model.Cohort
+import core.domain.cohort.port.outbound.CohortPersistencePort
 import org.springframework.stereotype.Repository
 
 @Repository
 class CohortRepository(
     private val cohortJpaRepository: CohortJpaRepository,
-    private val queryFactory: SpringDataQueryFactory,
 ) : CohortPersistencePort {
-    override fun findCohortIdByValue(value: String): CohortId? {
-        return queryFactory
-            .singleQueryOrNull<Long> {
-                select(col(CohortEntity::id))
-                from(entity(CohortEntity::class))
-                where(col(CohortEntity::value).equal(value))
-            }?.let { return CohortId(it) }
+    override fun findByValue(value: String): Cohort {
+        return cohortJpaRepository.findByValue(value).toDomain()
     }
 }

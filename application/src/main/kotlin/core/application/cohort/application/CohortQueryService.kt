@@ -1,7 +1,7 @@
 package core.application.cohort.application
 
 import core.application.cohort.application.config.CohortProperties
-import core.application.cohort.domain.exception.CohortNotFoundException
+import core.application.cohort.application.exception.CohortNotFoundException
 import core.application.cohort.domain.model.CohortId
 import core.application.cohort.domain.port.inbound.CohortQueryUseCase
 import core.application.cohort.domain.port.outbound.CohortPersistencePort

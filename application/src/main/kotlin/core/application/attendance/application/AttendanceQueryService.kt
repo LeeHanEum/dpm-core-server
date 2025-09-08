@@ -1,12 +1,12 @@
 package core.application.attendance.application
 
-import core.application.attendance.domain.exception.AttendanceNotFoundException
-import core.application.attendance.domain.port.inbound.query.GetAttendancesBySessionWeekQuery
-import core.application.attendance.domain.port.inbound.query.GetDetailAttendanceBySessionQuery
-import core.application.attendance.domain.port.inbound.query.GetDetailMemberAttendancesQuery
-import core.application.attendance.domain.port.inbound.query.GetMemberAttendancesQuery
-import core.application.attendance.domain.port.inbound.query.GetMyAttendanceBySessionQuery
-import core.application.attendance.domain.port.outbound.AttendancePersistencePort
+import core.application.attendance.application.exception.AttendanceNotFoundException
+import core.domain.attendance.port.inbound.query.GetAttendancesBySessionWeekQuery
+import core.domain.attendance.port.inbound.query.GetDetailAttendanceBySessionQuery
+import core.domain.attendance.port.inbound.query.GetDetailMemberAttendancesQuery
+import core.domain.attendance.port.inbound.query.GetMemberAttendancesQuery
+import core.domain.attendance.port.inbound.query.GetMyAttendanceBySessionQuery
+import core.domain.attendance.port.outbound.AttendancePersistencePort
 import core.application.attendance.presentation.dto.response.DetailAttendancesBySessionResponse
 import core.application.attendance.presentation.dto.response.DetailMemberAttendancesResponse
 import core.application.attendance.presentation.dto.response.MemberAttendanceResponse
@@ -81,10 +81,10 @@ class AttendanceQueryService(
 
     fun getDetailAttendanceBySession(query: GetDetailAttendanceBySessionQuery): DetailAttendancesBySessionResponse {
         val queryResult = (
-            attendancePersistencePort
-                .findDetailAttendanceBySession(query)
-                ?: throw AttendanceNotFoundException()
-        )
+                attendancePersistencePort
+                    .findDetailAttendanceBySession(query)
+                    ?: throw AttendanceNotFoundException()
+                )
 
         return AttendanceMapper.toDetailAttendanceBySessionResponse(
             queryResult,

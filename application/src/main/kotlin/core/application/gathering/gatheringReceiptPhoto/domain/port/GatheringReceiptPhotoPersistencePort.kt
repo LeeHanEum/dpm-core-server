@@ -1,3 +1,0 @@
-package core.application.gathering.gatheringReceiptPhoto.domain.port
-
-interface GatheringReceiptPhotoPersistencePort

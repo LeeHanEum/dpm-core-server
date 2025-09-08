@@ -1,16 +1,16 @@
 package core.application.member.member.application
 
-import core.application.authority.domain.model.AuthorityId
+import core.domain.authority.model.AuthorityId
 import core.application.member.member.application.exception.MemberNotFoundException
-import core.application.member.member.domain.exception.MemberTeamNotFoundException
-import core.application.member.member.domain.model.MemberId
-import core.application.member.member.domain.model.query.MemberNameAuthorityQueryModel
-import core.application.member.member.domain.port.inbound.MemberQueryByAuthorityUseCase
-import core.application.member.member.domain.port.inbound.MemberQueryUseCase
-import core.application.member.member.domain.port.outbound.MemberPersistencePort
+import core.application.member.member.application.exception.MemberTeamNotFoundException
+import core.domain.member.member.model.MemberId
+import core.domain.member.member.model.query.MemberNameAuthorityQueryModel
+import core.domain.member.member.port.inbound.MemberQueryByAuthorityUseCase
+import core.domain.member.member.port.inbound.MemberQueryUseCase
+import core.domain.member.member.port.outbound.MemberPersistencePort
 import core.application.member.member.presentation.response.MemberDetailsResponse
 import core.application.member.memberAuthority.application.MemberAuthorityService
-import core.application.refreshToken.domain.port.inbound.RefreshTokenInvalidator
+import core.domain.refreshToken.port.inbound.RefreshTokenInvalidator
 import core.application.security.oauth.token.JwtTokenInjector
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN

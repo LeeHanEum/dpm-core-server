@@ -1,6 +1,6 @@
 package core.application.member.memberCohort.application
 
-import core.application.cohort.domain.exception.CohortNotFoundException
+import core.application.cohort.application.exception.CohortNotFoundException
 import core.application.cohort.domain.port.inbound.CohortQueryUseCase
 import core.application.member.member.domain.model.MemberId
 import core.application.member.memberCohort.domain.model.MemberCohort

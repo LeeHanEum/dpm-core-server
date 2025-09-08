@@ -1,7 +1,7 @@
 package core.persistence.authority.entity
 
-import core.application.authority.domain.model.Authority
-import core.application.authority.domain.model.AuthorityId
+import core.domain.authority.model.Authority
+import core.domain.authority.model.AuthorityId
 import core.persistence.member.memberAuthority.entity.MemberAuthorityEntity
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column

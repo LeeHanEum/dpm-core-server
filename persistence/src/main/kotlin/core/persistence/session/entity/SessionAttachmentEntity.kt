@@ -1,8 +1,7 @@
 package core.persistence.session.entity
 
-import core.application.session.domain.model.SessionAttachment
-import core.application.session.domain.model.SessionAttachmentId
-import core.application.session.domain.model.SessionId
+import core.domain.sessionmodel.sessionmodel.sessionmodel.SessionAttachmentId
+import core.domain.sessionmodel.SessionId
 import jakarta.persistence.Column
 import jakarta.persistence.ConstraintMode
 import jakarta.persistence.Entity

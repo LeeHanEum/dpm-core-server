@@ -1,8 +1,8 @@
 package core.persistence.member.memberAuthority.repository
 
 import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
-import core.application.member.memberAuthority.domain.model.MemberAuthority
-import core.application.member.memberAuthority.domain.port.outbound.MemberAuthorityPersistencePort
+import core.domain.member.memberAuthority.model.MemberAuthority
+import core.domain.member.memberAuthority.port.outbound.MemberAuthorityPersistencePort
 import org.jooq.DSLContext
 import org.jooq.generated.tables.references.AUTHORITIES
 import org.jooq.generated.tables.references.MEMBER_AUTHORITIES

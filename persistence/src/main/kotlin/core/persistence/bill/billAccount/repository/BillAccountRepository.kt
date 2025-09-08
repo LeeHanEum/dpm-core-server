@@ -1,8 +1,8 @@
 package core.persistence.bill.billAccount.repository
 
-import core.application.bill.billAccount.domain.model.BillAccount
-import core.application.bill.billAccount.domain.model.BillAccountId
-import core.application.bill.billAccount.domain.port.BillAccountPersistencePort
+import core.domain.bill.bill.model.BillAccount
+import core.domain.bill.bill.model.BillAccountId
+import core.domain.bill.bill.port.BillAccountPersistencePort
 import org.springframework.stereotype.Repository
 import kotlin.jvm.optionals.getOrNull
 
